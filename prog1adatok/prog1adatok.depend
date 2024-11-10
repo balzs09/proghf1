@@ -1,0 +1,22 @@
+# depslib dependency file v1.0
+1731159707 source:c:\users\nagya\programozas\nf1\prog1adatok\main.c
+	<stdio.h>
+	<stdlib.h>
+	<time.h>
+	"prog1adatok.h"
+	"debugmalloc.h"
+	<windows.h>
+
+1730839024 c:\users\nagya\programozas\nf1\prog1adatok\prog1adatok.h
+
+1729956847 c:\users\nagya\programozas\nf1\prog1adatok\debugmalloc.h
+	<stdbool.h>
+	<stddef.h>
+	<stdlib.h>
+	<stdio.h>
+	<ctype.h>
+	<string.h>
+	<stdarg.h>
+	<process.h>
+	<unistd.h>
+
