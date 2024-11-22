@@ -1,2 +1,0 @@
-prog1adatok/bin/*
-prog1adatok/obj/*

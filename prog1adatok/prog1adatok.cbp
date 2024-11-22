@@ -31,11 +31,25 @@
 		<Compiler>
 			<Add option="-Wall" />
 		</Compiler>
+		<Unit filename="adatbeolvasas.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="csoportok.txt" />
 		<Unit filename="debugmalloc.h" />
+		<Unit filename="eredmenyek.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="eredmenyek.h" />
+		<Unit filename="hallgatoadatok.txt" />
 		<Unit filename="main.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="menu.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="menu.h" />
 		<Unit filename="prog1adatok.h" />
+		<Unit filename="tanuloeredmenyek.txt" />
 		<Extensions>
 			<lib_finder disable_auto="1" />
 		</Extensions>

@@ -20,3 +20,63 @@
 	<process.h>
 	<unistd.h>
 
+1732054128 source:c:\users\nagya\programozas\proghf1\prog1adatok\main.c
+	<stdio.h>
+	<stdlib.h>
+	<stdbool.h>
+	<string.h>
+	<time.h>
+	"debugmalloc.h"
+	"prog1adatok.h"
+	"eredmenyek.h"
+	"menu.h"
+
+1732053948 c:\users\nagya\programozas\proghf1\prog1adatok\prog1adatok.h
+
+1729956847 c:\users\nagya\programozas\proghf1\prog1adatok\debugmalloc.h
+	<stdbool.h>
+	<stddef.h>
+	<stdlib.h>
+	<stdio.h>
+	<ctype.h>
+	<string.h>
+	<stdarg.h>
+	<process.h>
+	<unistd.h>
+
+1731790161 source:c:\users\nagya\programozas\proghf1\prog1adatok\adatbeolvasas.c
+	<stdio.h>
+	<stdlib.h>
+	<time.h>
+	<stdbool.h>
+	<string.h>
+	"prog1adatok.h"
+	"debugmalloc.h"
+	<windows.h>
+
+1732046760 c:\users\nagya\programozas\proghf1\prog1adatok\eredmenyek.h
+	"prog1adatok.h"
+
+1732051089 source:c:\users\nagya\programozas\proghf1\prog1adatok\eredmenyek.c
+	<stdio.h>
+	<stdlib.h>
+	<time.h>
+	<stdbool.h>
+	<string.h>
+	"prog1adatok.h"
+	"eredmenyek.h"
+	"debugmalloc.h"
+
+1732056303 source:c:\users\nagya\programozas\proghf1\prog1adatok\menu.c
+	<stdio.h>
+	<stdlib.h>
+	<stdbool.h>
+	<string.h>
+	"debugmalloc.h"
+	"prog1adatok.h"
+	"eredmenyek.h"
+	"menu.h"
+	<windows.h>
+
+1732054112 c:\users\nagya\programozas\proghf1\prog1adatok\menu.h
+

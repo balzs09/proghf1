@@ -1,41 +1,42 @@
-typedef enum Felhasznalo
+#ifndef PROG1ADATOK_H_INCLUDED
+#define PROG1ADATOK_H_INCLUDED
+
+typedef struct Eredmeny
 {
-  tanar,
-  diak
-}Felhasznalo;
-typedef struct Prog1_Profil
-{
-    char felhasznalonev[50];
-    char jelszo[50];
-    Felhasznalo tanar_vagy_diak;
-}Prog1_Profil;
-/*a tobbi eredmeny (kis zhk osszege, felev vegi jegy) kiszamithato*/
-typedef struct eredmeny
-{
+    /*beolvasando adatok*/
     int KisZH[6];
     int NagyZH[2];
     int NagyHazi;
-    int hianyzas;
-}eredmeny;
+    int lab_hianyzas;
+    int gyak_hianyzas;
+    int szorgalmidb;
+    /*kiszamitando adatok*/
+    int ZH_pont;
+    int KisZH_pont;
+    int osszpont;
+    int vegsojegy;
+    bool sikeres_e;
+}Eredmeny;
 typedef struct Diak_Profil
 {
-    /*100 karaktert meghcalado nev nagyon-nagyon ritka, ezert veheto ez a hatarnak*/
-    char teljes_nev[100];
-    /*a neptun kod minden diaknak egy egyedi 6 karakterbol allo kod(+1 az üres karakter)*/
-    char Neptun_kod[7];
-    eredmeny aktualis_eredmeny;
+    char *teljes_nev;
+    char *Neptun_kod;
+    Eredmeny aktualis_eredmeny;
+    int elmelet_csoport,gyakorlat_csoport;
 }Diak_Profil;
-typedef enum Csoport_tipus
+typedef enum Csoport_Tipus
 {
-    elmelet,
-    gyakorlat
-}Csoport_tipus;
-typedef struct Csoport
+    Elmelet,
+    Gyakorlat
+}Csoport_Tipus;
+typedef struct Tanar_Profil
 {
-    char Csoport_nev[5];
-    Diak_Profil *diakok;
-    char tanar_nev;
-    Csoport_tipus elm_v_gyak;
-}Csoport;
-
+    char *teljes_nev;
+    int csoport;
+    Csoport_Tipus Elm_v_Gyak;
+}Tanar_Profil;
+FILE* file_opening(char const *fajlnev, char const *olvasas_vagy_iras);
+Diak_Profil *Diak_tarolas(int *diak_meret);
+Tanar_Profil *Tanar_tarolas(int *tanar_meret);
+#endif
 
