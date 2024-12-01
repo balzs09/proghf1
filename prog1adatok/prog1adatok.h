@@ -36,6 +36,9 @@ typedef struct Tanar_Profil
     Csoport_Tipus Elm_v_Gyak;
 }Tanar_Profil;
 FILE* file_opening(char const *fajlnev, char const *olvasas_vagy_iras);
+int char_to_int(char const szam);
+int csoport_sorszam_szamitas(char *csoportnev);
+char *f_sztring_beolvasas(FILE *fajl, char ujsztring);
 Diak_Profil *Diak_tarolas(int *diak_meret);
 Tanar_Profil *Tanar_tarolas(int *tanar_meret);
 #endif

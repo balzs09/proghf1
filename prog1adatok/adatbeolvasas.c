@@ -5,6 +5,7 @@
 #include <string.h>
 #include "prog1adatok.h"
 #include "debugmalloc.h"
+#include "menu.h"
 /*22.sor*/
 #ifdef _WIN32
     #include <windows.h>
@@ -56,7 +57,7 @@ FILE* file_opening(char const *fajlnev, char const *olvasas_vagy_iras)
     fclose(csoport_iras);
 }*/
 /*a memoriat a fofuggvenyben fel is kell szabaditani.*/
-static char *sztring_beolvasas(FILE *fajl, char ujsztring)
+char *f_sztring_beolvasas(FILE *fajl, char ujsztring)
 {
    char *sor=(char*) malloc(1*sizeof(char));
    if(sor==NULL) {printf("Nem sikerult memoriat foglalni");return NULL;}
@@ -77,17 +78,22 @@ static char *sztring_beolvasas(FILE *fajl, char ujsztring)
         sor=vegleges;
         vegleges[betu_db]=ujbetu;
         betu_db++;
-        vegleges[betu_db]='\0';
         sikeresen=fscanf(fajl,"%c",&ujbetu);
+    }
+    if(betu_db>0)
+        sor[betu_db]='\0';
+    else{
+        free(sor);
+        return NULL;
     }
     return sor;
 }
-static int char_to_int(char const szam)
+int char_to_int(char const szam)
 {
    return szam-'0';
 }
 /*A fuggveny visszatéríti a csoport nevében szereplõ szám -1-et. Ez alapján tárolja egy Csoport tömbben a neveket.*/
-static int csoport_sorszam_szamitas(char *csoportnev)
+int csoport_sorszam_szamitas(char *csoportnev)
 {
     int csop_sorszam;
     if(strlen(csoportnev)>2) csop_sorszam=char_to_int(csoportnev[1])*10+char_to_int(csoportnev[2]);
@@ -123,22 +129,22 @@ Diak_Profil *Diak_tarolas( int *diak_meret)
     Diak_Profil *osszesdiak=(Diak_Profil*)malloc(700*sizeof(Diak_Profil));/* atlagosan 700 diak kerül a ,BME VIK mernokinformatikus szakara az utobbi evek adatai alapjan*/
     bool van_memoria=sikeres_diak_memoriafoglalas(osszesdiak);
     int diak_db=0;
-    char *aktualis_nev=sztring_beolvasas(f_hallgatok,'\n');
+    char *aktualis_nev=f_sztring_beolvasas(f_hallgatok,'\n');
     while(strcmp(aktualis_nev,"Neptun-Kodok:")!=0&&van_memoria==true){
         osszesdiak[diak_db].teljes_nev=aktualis_nev;
-        aktualis_nev=sztring_beolvasas(f_hallgatok,'\n');
+        aktualis_nev=f_sztring_beolvasas(f_hallgatok,'\n');
         if(diak_db>699){ osszesdiak=(Diak_Profil*)realloc( osszesdiak,(diak_db+1)*sizeof(Diak_Profil));van_memoria=sikeres_diak_memoriafoglalas(osszesdiak);}
         diak_db++;
     }
     free(aktualis_nev);
     if(diak_db<700){ osszesdiak=(Diak_Profil*)realloc(osszesdiak,diak_db*sizeof(Diak_Profil));van_memoria=sikeres_diak_memoriafoglalas(osszesdiak);}
-    for(int j=0;j<diak_db;j++) osszesdiak[j].Neptun_kod=sztring_beolvasas(f_hallgatok,'\n');
+    for(int j=0;j<diak_db;j++) osszesdiak[j].Neptun_kod=f_sztring_beolvasas(f_hallgatok,'\n');
     /*csoportok letrehozasa, amiatt van commentben, mert csak egyszer kell a csoportokat legeneralni, hogy azutan azok valtozatlanok maradjanak.*/
     /* diak_csoport_generalas();*/
     char *elmelet_nev,*gyakorlat_nev;
     for(int i=0;i<diak_db;i++)    {
-        elmelet_nev=sztring_beolvasas(f_hallgatok,' ');
-        gyakorlat_nev=sztring_beolvasas(f_hallgatok,'\n');
+        elmelet_nev=f_sztring_beolvasas(f_hallgatok,' ');
+        gyakorlat_nev=f_sztring_beolvasas(f_hallgatok,'\n');
         osszesdiak[i].elmelet_csoport=char_to_int(elmelet_nev[1]);
         free(elmelet_nev);
         osszesdiak[i].gyakorlat_csoport=csoport_sorszam_szamitas(gyakorlat_nev);
@@ -156,17 +162,17 @@ Tanar_Profil *Tanar_tarolas( int *tanar_meret)
     Tanar_Profil *osszestanar=(Tanar_Profil*)malloc(27*sizeof(Tanar_Profil));
     int tanar_db=0;
     bool van_memoria=sikeres_tanar_memoriafoglalas(osszestanar);
-    char *aktualis_nev=sztring_beolvasas(f_csoportok,'\n');
+    char *aktualis_nev=f_sztring_beolvasas(f_csoportok,'\n');
      while(strcmp(aktualis_nev,"Csoportok:")!=0&&van_memoria==true){
         osszestanar[tanar_db].teljes_nev=aktualis_nev;
-        aktualis_nev=sztring_beolvasas(f_csoportok,'\n');
+        aktualis_nev=f_sztring_beolvasas(f_csoportok,'\n');
         if(tanar_db>26){ osszestanar=(Tanar_Profil*)realloc( osszestanar,tanar_db*sizeof(Tanar_Profil));van_memoria=sikeres_tanar_memoriafoglalas(osszestanar);}
         tanar_db++;
     }
     free(aktualis_nev);
     if(tanar_db<27){ osszestanar=(Tanar_Profil*)realloc(osszestanar,(tanar_db+1)*sizeof(Tanar_Profil));van_memoria=sikeres_tanar_memoriafoglalas(osszestanar);}
     for(int j=0;j<tanar_db;j++) {
-            char *csoport_nev=sztring_beolvasas(f_csoportok,'\n');
+            char *csoport_nev=f_sztring_beolvasas(f_csoportok,'\n');
             if(csoport_nev[0]=='E'){osszestanar[j].Elm_v_Gyak=Elmelet;osszestanar[j].csoport=char_to_int(csoport_nev[1]);}
             else {osszestanar[j].Elm_v_Gyak=Gyakorlat;osszestanar[j].csoport=csoport_sorszam_szamitas(csoport_nev);}
             free(csoport_nev);

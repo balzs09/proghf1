@@ -113,12 +113,13 @@ int eredmenytipus_hasonlitas(Diak_Profil p,char *eredmenytipus)
     if(strcmp("ZH1",eredmenytipus)==0) return p.aktualis_eredmeny.NagyZH[0];
     if(strcmp("ZH2",eredmenytipus)==0) return p.aktualis_eredmeny.NagyZH[1];
     if(strcmp("ZH pont",eredmenytipus)==0) return p.aktualis_eredmeny.ZH_pont;
-    for(int i=0;i<6;i++)
-        {
-            char sorszam='0'+i+1;
-            if(strcmp(("ZH%c",&sorszam),eredmenytipus)==0) return p.aktualis_eredmeny.NagyZH[i];
-        }
-   if(strcmp("kis ZH pont",eredmenytipus)==0) return p.aktualis_eredmeny.NagyZH[0];
+    if(strcmp("KZH1",eredmenytipus)==0) return p.aktualis_eredmeny.KisZH[0];
+    if(strcmp("KZH2",eredmenytipus)==0) return p.aktualis_eredmeny.KisZH[1];
+    if(strcmp("KZH3",eredmenytipus)==0) return p.aktualis_eredmeny.KisZH[2];
+    if(strcmp("KZH4",eredmenytipus)==0) return p.aktualis_eredmeny.KisZH[3];
+    if(strcmp("KZH5",eredmenytipus)==0) return p.aktualis_eredmeny.KisZH[4];
+    if(strcmp("KZH6",eredmenytipus)==0) return p.aktualis_eredmeny.KisZH[5];
+   if(strcmp("kis ZH pont",eredmenytipus)==0) return p.aktualis_eredmeny.KisZH_pont;
    if(strcmp("nagy házi",eredmenytipus)==0) return p.aktualis_eredmeny.NagyHazi;
    if(strcmp("labor hiányzás",eredmenytipus)==0) return p.aktualis_eredmeny.lab_hianyzas;
    if(strcmp("gyakorlat hiányzás",eredmenytipus)==0) return p.aktualis_eredmeny.gyak_hianyzas;
@@ -158,7 +159,7 @@ void eredmeny_lista_kiir(Eredmeny_Lista *eleje)
 {
     Eredmeny_Lista *mozgo = eleje;
     while (mozgo != NULL){
-        printf("%d ",mozgo->eredmeny);
+        printf("%10d ",mozgo->eredmeny);
         mozgo=mozgo->kov;
     }
     printf("\n");
@@ -213,48 +214,49 @@ Diak_Lista_sikertelen *csokkeno_felepites_sikertelen(Diak_Lista_sikertelen *elej
 
     return eleje;
 }
-void atmeno_diak_lista_kiir(Diak_Lista_sikeres *eleje)
+Eredmeny_Lista *minden_eredmeny_hozzafuzes(Eredmeny_Lista *eleje,Diak_Profil diak)
+{
+        for(int i=0;i<6;i++) eleje=eredmeny_lista_hozzafuzes(eleje,diak.aktualis_eredmeny.KisZH[i]);
+        eleje=eredmeny_lista_hozzafuzes(eleje,diak.aktualis_eredmeny.KisZH_pont);
+        for(int i=0;i<2;i++) eleje=eredmeny_lista_hozzafuzes(eleje,diak.aktualis_eredmeny.NagyZH[i]);
+        eleje=eredmeny_lista_hozzafuzes(eleje,diak.aktualis_eredmeny.ZH_pont);
+        eleje=eredmeny_lista_hozzafuzes(eleje,diak.aktualis_eredmeny.NagyHazi);
+        eleje=eredmeny_lista_hozzafuzes(eleje,diak.aktualis_eredmeny.lab_hianyzas);
+        eleje=eredmeny_lista_hozzafuzes(eleje,diak.aktualis_eredmeny.gyak_hianyzas);
+        eleje=eredmeny_lista_hozzafuzes(eleje,diak.aktualis_eredmeny.szorgalmidb);
+        eleje=eredmeny_lista_hozzafuzes(eleje,diak.aktualis_eredmeny.osszpont);
+        eleje=eredmeny_lista_hozzafuzes(eleje,diak.aktualis_eredmeny.vegsojegy);
+        return eleje;
+}
+void atmeno_diak_lista_kiir_elore(Diak_Lista_sikeres *eleje)
 {
     Diak_Lista_sikeres *mozgo = eleje;
     while (mozgo != NULL){
         Eredmeny_Lista *eredmeny_eleje=NULL;
-        printf("%s ",mozgo->tanulo.teljes_nev);
-        printf("%s ",mozgo->tanulo.Neptun_kod);
-        for(int i=0;i<6;i++) eredmeny_eleje=eredmeny_lista_hozzafuzes(eredmeny_eleje,mozgo->tanulo.aktualis_eredmeny.KisZH[i]);
-        eredmeny_eleje=eredmeny_lista_hozzafuzes(eredmeny_eleje,mozgo->tanulo.aktualis_eredmeny.KisZH_pont);
-        for(int i=0;i<2;i++) eredmeny_eleje=eredmeny_lista_hozzafuzes(eredmeny_eleje,mozgo->tanulo.aktualis_eredmeny.NagyZH[i]);
-        eredmeny_eleje=eredmeny_lista_hozzafuzes(eredmeny_eleje,mozgo->tanulo.aktualis_eredmeny.ZH_pont);
-        eredmeny_eleje=eredmeny_lista_hozzafuzes(eredmeny_eleje,mozgo->tanulo.aktualis_eredmeny.lab_hianyzas);
-        eredmeny_eleje=eredmeny_lista_hozzafuzes(eredmeny_eleje,mozgo->tanulo.aktualis_eredmeny.gyak_hianyzas);
-        eredmeny_eleje=eredmeny_lista_hozzafuzes(eredmeny_eleje,mozgo->tanulo.aktualis_eredmeny.szorgalmidb);
-        eredmeny_eleje=eredmeny_lista_hozzafuzes(eredmeny_eleje,mozgo->tanulo.aktualis_eredmeny.osszpont);
-        eredmeny_eleje=eredmeny_lista_hozzafuzes(eredmeny_eleje,mozgo->tanulo.aktualis_eredmeny.vegsojegy);
+        printf("%-17s",mozgo->tanulo.teljes_nev);
+        printf("%8s",mozgo->tanulo.Neptun_kod);
+        printf("   E%d / G%d",mozgo->tanulo.elmelet_csoport,mozgo->tanulo.gyakorlat_csoport);
+        eredmeny_eleje=minden_eredmeny_hozzafuzes(eredmeny_eleje,mozgo->tanulo);
         eredmeny_lista_kiir(eredmeny_eleje);
         eredmeny_lista_felszabadit(eredmeny_eleje);
         mozgo=mozgo->kov;
     }
 }
-void bukott_diak_lista_kiir(Diak_Lista_sikertelen *eleje)
+void bukott_diak_lista_kiir_elore(Diak_Lista_sikertelen *eleje)
 {
     Diak_Lista_sikertelen *mozgo = eleje;
     while (mozgo != NULL){
         Eredmeny_Lista *eredmeny_eleje=NULL;
-        printf("%s ",mozgo->tanulo.teljes_nev);
-        printf("%s ",mozgo->tanulo.Neptun_kod);
-        for(int i=0;i<6;i++) eredmeny_eleje=eredmeny_lista_hozzafuzes(eredmeny_eleje,mozgo->tanulo.aktualis_eredmeny.KisZH[i]);
-        eredmeny_eleje=eredmeny_lista_hozzafuzes(eredmeny_eleje,mozgo->tanulo.aktualis_eredmeny.KisZH_pont);
-        for(int i=0;i<2;i++) eredmeny_eleje=eredmeny_lista_hozzafuzes(eredmeny_eleje,mozgo->tanulo.aktualis_eredmeny.NagyZH[i]);
-        eredmeny_eleje=eredmeny_lista_hozzafuzes(eredmeny_eleje,mozgo->tanulo.aktualis_eredmeny.ZH_pont);
-        eredmeny_eleje=eredmeny_lista_hozzafuzes(eredmeny_eleje,mozgo->tanulo.aktualis_eredmeny.lab_hianyzas);
-        eredmeny_eleje=eredmeny_lista_hozzafuzes(eredmeny_eleje,mozgo->tanulo.aktualis_eredmeny.gyak_hianyzas);
-        eredmeny_eleje=eredmeny_lista_hozzafuzes(eredmeny_eleje,mozgo->tanulo.aktualis_eredmeny.szorgalmidb);
-        eredmeny_eleje=eredmeny_lista_hozzafuzes(eredmeny_eleje,mozgo->tanulo.aktualis_eredmeny.osszpont);
-        eredmeny_eleje=eredmeny_lista_hozzafuzes(eredmeny_eleje,mozgo->tanulo.aktualis_eredmeny.vegsojegy);
+        printf("%-17s ",mozgo->tanulo.teljes_nev);
+        printf("%8s ",mozgo->tanulo.Neptun_kod);
+        printf("   E%d / G%d",mozgo->tanulo.elmelet_csoport,mozgo->tanulo.gyakorlat_csoport);
+        eredmeny_eleje=minden_eredmeny_hozzafuzes(eredmeny_eleje,mozgo->tanulo);
         eredmeny_lista_kiir(eredmeny_eleje);
         eredmeny_lista_felszabadit(eredmeny_eleje);
         mozgo=mozgo->kov;
     }
 }
+
 void atmeno_diak_lista_felszabadit(Diak_Lista_sikeres *eleje)
 {
     Diak_Lista_sikeres *iter=eleje;
@@ -275,21 +277,4 @@ void bukott_diak_lista_felszabadit(Diak_Lista_sikertelen *eleje)
         iter=kov;
     }
 }
-void lista_m()
-{
-    int meret=0;
-    Diak_Profil *diakok=diak_eredmenyek(&meret);
-    Diak_Lista_sikeres *sikeresek_eleje=NULL;
-    Diak_Lista_sikertelen *sikertelenek_eleje=NULL;
-    for(int i=0;i<meret;i++)
-        if(diakok[i].aktualis_eredmeny.vegsojegy>0)
-            sikeresek_eleje=csokkeno_felepites_sikeres(sikeresek_eleje,diakok[i],"összes pont");
-          else sikertelenek_eleje=csokkeno_felepites_sikertelen(sikertelenek_eleje,diakok[i],"összes pont");
-    atmeno_diak_lista_kiir(sikeresek_eleje);
-    bukott_diak_lista_kiir(sikertelenek_eleje);
-    for(int i=0;i<meret;i++) {free(diakok[i].Neptun_kod);free(diakok[i].teljes_nev);}
-    free(diakok);
-    atmeno_diak_lista_felszabadit(sikeresek_eleje);
-    bukott_diak_lista_felszabadit(sikertelenek_eleje);
 
-}

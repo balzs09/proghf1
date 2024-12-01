@@ -35,7 +35,6 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="csoportok.txt" />
-		<Unit filename="debugmalloc.h" />
 		<Unit filename="eredmenyek.c">
 			<Option compilerVar="CC" />
 		</Unit>
